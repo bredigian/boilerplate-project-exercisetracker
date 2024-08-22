@@ -41,7 +41,7 @@ app.post("/api/users/:_id/exercises", function (req, res) {
   if (!user) return res.status(404).json({ message: "User not found." })
 
   const payload = {
-    user,
+    ...user,
     description,
     duration: parseInt(duration),
     date: objectDate.toDateString(),
@@ -49,7 +49,12 @@ app.post("/api/users/:_id/exercises", function (req, res) {
 
   EXCERCISES.push(payload)
 
-  return res.json(payload)
+  return res.json({
+    user,
+    description: payload.description,
+    duration: payload.duration,
+    date: payload.date,
+  })
 })
 
 app.get("/api/users/:_id/logs", function (req, res) {
