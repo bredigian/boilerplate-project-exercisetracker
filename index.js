@@ -22,8 +22,6 @@ app.post("/api/users", function (req, res) {
 
   USERS.push({ username, _id })
 
-  console.log(`${username} created!`)
-
   return res.json({ username, _id })
 })
 
@@ -37,24 +35,19 @@ app.post("/api/users/:_id/exercises", function (req, res) {
   const objectDate = date ? new Date(date) : new Date()
   const user = USERS.find((user) => user._id === _id)
 
-  console.log(`/api/users/${_id}/exercises`, user)
   if (!user) return res.status(404).json({ message: "User not found." })
 
   const payload = {
-    ...user,
+    username: user.username,
     description,
     duration: parseInt(duration),
     date: objectDate.toDateString(),
+    _id: user._id,
   }
 
   EXCERCISES.push(payload)
 
-  return res.json({
-    user,
-    description: payload.description,
-    duration: payload.duration,
-    date: payload.date,
-  })
+  res.json(payload)
 })
 
 app.get("/api/users/:_id/logs", function (req, res) {
